@@ -1,0 +1,12 @@
+{
+    "name": "ZooWorld.Editor",
+    "rootNamespace": "ZooWorld.Editor",
+    "references": [
+        "ZooWorld.Core",
+        "ZooWorld.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": true
+}
