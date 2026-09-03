@@ -11,10 +11,16 @@ namespace ZooWorld.Spawning
         [SerializeField, Min(0.01f)] private float _minInterval = 1f;
         [SerializeField, Min(0.01f)] private float _maxInterval = 2f;
         [SerializeField] private AnimalDefinition[] _animals;
+        [SerializeField, Min(1)] private int _prewarmCountPerSpecies = 64;
+        [SerializeField] private LayerMask _animalLayers;
+        [SerializeField, Min(0f)] private float _spawnClearance = 0.05f;
 
         public float MinInterval => _minInterval;
         public float MaxInterval => _maxInterval;
         public int AnimalCount => _animals?.Length ?? 0;
+        public int PrewarmCountPerSpecies => _prewarmCountPerSpecies;
+        public int AnimalLayers => _animalLayers.value;
+        public float SpawnClearance => _spawnClearance;
 
         public AnimalDefinition GetAnimal(int index)
         {
@@ -35,6 +41,15 @@ namespace ZooWorld.Spawning
                 throw new InvalidOperationException($"Spawn settings '{name}': add at least one animal.");
             }
 
+            if (_prewarmCountPerSpecies < 1)
+                throw new InvalidOperationException($"Spawn settings '{name}': Prewarm Count Per Species must be positive.");
+
+            if (_animalLayers.value == 0)
+                throw new InvalidOperationException($"Spawn settings '{name}': select the Animals layer in Animal Layers.");
+
+            if (float.IsNaN(_spawnClearance) || float.IsInfinity(_spawnClearance) || _spawnClearance < 0f)
+                throw new InvalidOperationException($"Spawn settings '{name}': Spawn Clearance must be finite and non-negative.");
+
             var speciesIds = new HashSet<string>(StringComparer.Ordinal);
 
             for (int i = 0; i < _animals.Length; i++)
@@ -48,6 +63,12 @@ namespace ZooWorld.Spawning
                 }
 
                 animal.Validate();
+
+                if ((_animalLayers.value & (1 << animal.Prefab.gameObject.layer)) == 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Animal '{animal.name}': the prefab's layer must be included in Spawn Settings / Animal Layers.");
+                }
 
                 if (!speciesIds.Add(animal.SpeciesId))
                 {

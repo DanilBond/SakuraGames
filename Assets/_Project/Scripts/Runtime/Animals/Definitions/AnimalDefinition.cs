@@ -10,10 +10,12 @@ namespace ZooWorld.Animals.Definitions
         [SerializeField] private string _speciesId;
         [SerializeField] private FoodRole _foodRole;
         [SerializeField] private MovementDefinition _movement;
+        [SerializeField] private AnimalBehaviour _prefab;
 
         public string SpeciesId => _speciesId;
         public FoodRole FoodRole => _foodRole;
         public MovementDefinition Movement => _movement;
+        public AnimalBehaviour Prefab => _prefab;
 
         public void Validate()
         {
@@ -39,6 +41,13 @@ namespace ZooWorld.Animals.Definitions
             }
 
             _movement.Validate();
+
+            if (_prefab == null)
+            {
+                throw new InvalidOperationException($"Animal '{name}': assign Prefab.");
+            }
+
+            _prefab.ValidatePrefab();
         }
     }
 }

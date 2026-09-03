@@ -1,0 +1,14 @@
+{
+    "name": "ZooWorld.Movement.Tests",
+    "rootNamespace": "ZooWorld.Movement.Tests",
+    "references": [
+        "ZooWorld.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

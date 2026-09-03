@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using ZooWorld.Animals.Movement;
+using ZooWorld.World;
 
 namespace ZooWorld.Animals.Definitions
 {
@@ -18,6 +21,14 @@ namespace ZooWorld.Animals.Definitions
             RequirePositive(_distance, nameof(Distance));
             RequirePositive(_height, nameof(Height));
             RequirePositive(_jumpInterval, nameof(JumpInterval));
+
+            throw new NotSupportedException(
+                $"Movement '{name}': jumping will be implemented in stage 3. Remove this animal from Spawn Settings for now.");
+        }
+
+        public override IAnimalMovement CreateMovement(Rigidbody body, WorldBoundsProvider bounds, float radius)
+        {
+            throw new NotSupportedException("Jump movement will be implemented in stage 3.");
         }
     }
 }

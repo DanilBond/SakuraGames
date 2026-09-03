@@ -15,5 +15,9 @@ MonoBehaviour:
   _minInterval: 1
   _maxInterval: 2
   _animals:
-  - {fileID: 11400000, guid: b9162966e2bae054db91d75d23b886a1, type: 2}
   - {fileID: 11400000, guid: 0673823e6ea2ba24690f88be5f3285b7, type: 2}
+  _prewarmCountPerSpecies: 64
+  _animalLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  _spawnClearance: 0.05
