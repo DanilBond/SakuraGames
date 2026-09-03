@@ -3,6 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using ZooWorld.Core.Animals;
+using ZooWorld.Feeding;
 using ZooWorld.Spawning;
 using ZooWorld.World;
 
@@ -31,10 +32,12 @@ namespace ZooWorld.Composition
 
             builder.RegisterInstance(_spawnSettings);
             builder.Register<AnimalIdProvider>(Lifetime.Scoped);
+            builder.Register<FoodChainRules>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<FeedingService>(Lifetime.Scoped).AsSelf();
             builder.Register(_ => new WorldBoundsProvider(_worldCamera, _groundHeight, _boundaryPadding),
                 Lifetime.Scoped);
             builder.Register(container => new AnimalFactory(container.Resolve<AnimalIdProvider>(),
-                container.Resolve<WorldBoundsProvider>(), _animalsRoot), Lifetime.Scoped);
+                container.Resolve<WorldBoundsProvider>(), _animalsRoot, container.Resolve<FeedingService>()), Lifetime.Scoped);
             builder.RegisterEntryPoint<SpawnService>(Lifetime.Scoped).AsSelf();
             builder.RegisterEntryPoint<GameStartup>(Lifetime.Scoped);
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 using ZooWorld.Animals;
 using ZooWorld.Animals.Definitions;
 using ZooWorld.Core.Animals;
+using ZooWorld.Feeding;
 using ZooWorld.World;
 
 namespace ZooWorld.Spawning
@@ -13,16 +14,19 @@ namespace ZooWorld.Spawning
         private readonly AnimalIdProvider _ids;
         private readonly WorldBoundsProvider _bounds;
         private readonly Transform _animalsRoot;
+        private readonly FeedingService _feeding;
 
         private Dictionary<AnimalDefinition, AnimalPool> _pools;
         private Transform _stagingRoot;
         private bool _disposed;
 
-        public AnimalFactory(AnimalIdProvider ids, WorldBoundsProvider bounds, Transform animalsRoot)
+        public AnimalFactory(AnimalIdProvider ids, WorldBoundsProvider bounds, Transform animalsRoot,
+            FeedingService feeding)
         {
             _ids = ids;
             _bounds = bounds;
             _animalsRoot = animalsRoot;
+            _feeding = feeding;
         }
 
         public void Initialize(SpawnSettings settings)
@@ -123,7 +127,7 @@ namespace ZooWorld.Spawning
 
             try
             {
-                animal.Initialize(definition, _bounds, this);
+                animal.Initialize(definition, _bounds, this, _feeding);
                 animal.transform.SetParent(_animalsRoot, false);
                 return animal;
             }

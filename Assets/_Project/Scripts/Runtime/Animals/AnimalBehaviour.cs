@@ -3,6 +3,7 @@ using UnityEngine;
 using ZooWorld.Animals.Definitions;
 using ZooWorld.Animals.Movement;
 using ZooWorld.Core.Animals;
+using ZooWorld.Feeding;
 using ZooWorld.Spawning;
 using ZooWorld.World;
 
@@ -17,6 +18,7 @@ namespace ZooWorld.Animals
         private Transform _transform;
         private GameObject _gameObject;
         private IAnimalMovement _movement;
+        private FeedingService _feeding;
         private float _collisionRadius;
 
         public AnimalDefinition Definition { get; private set; }
@@ -24,6 +26,7 @@ namespace ZooWorld.Animals
         public bool IsSpawned => State.LifeState != AnimalLifeState.Inactive;
         public bool IsAlive => State.IsAlive;
         public float CollisionRadius => _collisionRadius;
+        public Vector3 Position => _body.position;
 
         internal AnimalState State { get; } = new AnimalState();
         internal AnimalFactory Owner { get; private set; }
@@ -46,10 +49,19 @@ namespace ZooWorld.Animals
             if (!IsAlive)
                 return;
 
-            if (collision.rigidbody == null || collision.rigidbody.isKinematic)
+            Rigidbody otherBody = collision.rigidbody;
+
+            if (otherBody == null || otherBody.isKinematic)
+            {
                 HandleObstacleContacts(collision);
+            }
             else
-                _movement.OnCollision();
+            {
+                _feeding.HandleCollision(this, otherBody);
+
+                if (IsAlive)
+                    _movement.OnCollision();
+            }
         }
 
         private void OnCollisionStay(Collision collision)
@@ -66,7 +78,13 @@ namespace ZooWorld.Animals
             }
         }
 
-        public void Initialize(AnimalDefinition definition, WorldBoundsProvider bounds, AnimalFactory owner)
+        private void OnDestroy()
+        {
+            _feeding?.Unregister(_body);
+        }
+
+        public void Initialize(AnimalDefinition definition, WorldBoundsProvider bounds, AnimalFactory owner,
+            FeedingService feeding)
         {
             if (Definition != null)
             {
@@ -88,6 +106,9 @@ namespace ZooWorld.Animals
                 throw new ArgumentNullException(nameof(owner));
             }
 
+            if (feeding == null)
+                throw new ArgumentNullException(nameof(feeding));
+
             // Awake may not have run on an instance created under the inactive pool root.
             EnsureComponents();
             _collisionRadius = ValidatePrefab();
@@ -95,7 +116,16 @@ namespace ZooWorld.Animals
             _movement = definition.Movement.CreateMovement(_body, bounds, _collisionRadius);
             Definition = definition;
             Owner = owner;
+            _feeding = feeding;
             Despawn();
+            _feeding.Register(this, _body);
+        }
+
+        internal void HideAfterDeath()
+        {
+            _body.linearVelocity = Vector3.zero;
+            _body.angularVelocity = Vector3.zero;
+            _gameObject.SetActive(false);
         }
 
         public void Spawn(long spawnId, Vector3 position, Vector3 direction)
