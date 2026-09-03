@@ -23,8 +23,10 @@ namespace ZooWorld.Physics.Tests
         public void SetUp()
         {
             _randomState = Random.state;
-            _scene = SceneManager.CreateScene("JumpMovementTest", new CreateSceneParameters(LocalPhysicsMode.Physics3D));
+            _scene = EditorSceneManager.NewPreviewScene();
             _physics = _scene.GetPhysicsScene();
+            Assert.That(_physics, Is.Not.EqualTo(UnityEngine.Physics.defaultPhysicsScene),
+                "Tests must not simulate the open gameplay scene.");
 
             var ground = CreateObject("Ground");
             ground.transform.position = new Vector3(0f, -0.5f, 0f);
@@ -63,7 +65,7 @@ namespace ZooWorld.Physics.Tests
         public void TearDown()
         {
             if (_scene.IsValid())
-                EditorSceneManager.CloseScene(_scene, true);
+                EditorSceneManager.ClosePreviewScene(_scene);
 
             Object.DestroyImmediate(_definition);
             Object.DestroyImmediate(_material);
