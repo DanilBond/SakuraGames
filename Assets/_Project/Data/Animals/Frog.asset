@@ -15,3 +15,4 @@ MonoBehaviour:
   _speciesId: frog
   _foodRole: 0
   _movement: {fileID: 11400000, guid: d35deb0d7569e684ea7decc601ea32e4, type: 2}
+  _prefab: {fileID: 7067182752638455593, guid: 5f30c878dae0570488e268c4c531d27a, type: 3}

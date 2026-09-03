@@ -48,6 +48,7 @@ namespace ZooWorld.Animals.Definitions
             }
 
             _prefab.ValidatePrefab();
+            _prefab.ValidateMovement(_movement);
         }
     }
 }

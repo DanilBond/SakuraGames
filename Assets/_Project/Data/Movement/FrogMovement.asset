@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f1b849fdce10844ab03aad87d45859, type: 3}
   m_Name: FrogMovement
   m_EditorClassIdentifier: ZooWorld.Runtime::ZooWorld.Animals.Definitions.JumpMovementDefinition
-  _distance: 2
-  _height: 0.6
+  _distance: 3
+  _height: 1
   _jumpInterval: 2

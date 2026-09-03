@@ -22,13 +22,30 @@ namespace ZooWorld.Animals.Definitions
             RequirePositive(_height, nameof(Height));
             RequirePositive(_jumpInterval, nameof(JumpInterval));
 
-            throw new NotSupportedException(
-                $"Movement '{name}': jumping will be implemented in stage 3. Remove this animal from Spawn Settings for now.");
+            Vector3 gravity = Physics.gravity;
+
+            if (float.IsNaN(gravity.y) || float.IsInfinity(gravity.y) || gravity.y >= -0.0001f ||
+                gravity.x != 0f || gravity.z != 0f)
+            {
+                throw new InvalidOperationException(
+                    $"Movement '{name}': jumping requires finite downward gravity on the Y axis.");
+            }
+        }
+
+        public override void ValidateBody(Rigidbody body)
+        {
+            if (!body.useGravity || body.linearDamping != 0f ||
+                (body.constraints & RigidbodyConstraints.FreezePosition) != 0)
+            {
+                throw new InvalidOperationException(
+                    $"Movement '{name}', prefab '{body.name}': enable Use Gravity, set Linear Damping to 0 " +
+                    "and uncheck all Freeze Position axes for jumping.");
+            }
         }
 
         public override IAnimalMovement CreateMovement(Rigidbody body, WorldBoundsProvider bounds, float radius)
         {
-            throw new NotSupportedException("Jump movement will be implemented in stage 3.");
+            return new JumpMovement(body, bounds, this, radius);
         }
     }
 }

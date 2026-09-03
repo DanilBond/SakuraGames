@@ -91,6 +91,7 @@ namespace ZooWorld.Animals
             // Awake may not have run on an instance created under the inactive pool root.
             EnsureComponents();
             _collisionRadius = ValidatePrefab();
+            ValidateMovement(definition.Movement);
             _movement = definition.Movement.CreateMovement(_body, bounds, _collisionRadius);
             Definition = definition;
             Owner = owner;
@@ -178,6 +179,12 @@ namespace ZooWorld.Animals
             }
 
             return radius;
+        }
+
+        public void ValidateMovement(MovementDefinition movement)
+        {
+            EnsureComponents();
+            movement.ValidateBody(_body);
         }
 
         private void EnsureComponents()

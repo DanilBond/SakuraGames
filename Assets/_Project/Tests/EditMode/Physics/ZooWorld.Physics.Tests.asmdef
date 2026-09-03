@@ -1,0 +1,14 @@
+{
+    "name": "ZooWorld.Physics.Tests",
+    "rootNamespace": "ZooWorld.Physics.Tests",
+    "references": [
+        "ZooWorld.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

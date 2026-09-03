@@ -11,6 +11,10 @@ namespace ZooWorld.Animals.Definitions
 
         public abstract IAnimalMovement CreateMovement(Rigidbody body, WorldBoundsProvider bounds, float radius);
 
+        public virtual void ValidateBody(Rigidbody body)
+        {
+        }
+
         protected void RequirePositive(float value, string fieldName)
         {
             if (float.IsNaN(value) || float.IsInfinity(value) || value <= 0f)
