@@ -1,0 +1,9 @@
+{
+    "name": "ZooWorld.Runtime",
+    "rootNamespace": "ZooWorld",
+    "references": [
+        "ZooWorld.Core",
+        "VContainer"
+    ],
+    "autoReferenced": true
+}
