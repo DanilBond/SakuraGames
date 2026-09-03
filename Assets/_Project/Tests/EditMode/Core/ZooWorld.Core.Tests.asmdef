@@ -1,0 +1,21 @@
+{
+    "name": "ZooWorld.Core.Tests",
+    "rootNamespace": "ZooWorld.Core.Tests",
+    "references": [
+        "ZooWorld.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
