@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using VContainer.Unity;
 using ZooWorld.Core.Animals;
@@ -32,6 +33,7 @@ namespace ZooWorld.UI
             if (_initialized || _disposed)
                 throw new InvalidOperationException("Game HUD is already initialized or disposed.");
 
+            DOTween.Init();
             _counters.Initialize();
             _counters.Show(_statistics.PreyDeaths, _statistics.PredatorDeaths);
             _popups.Initialize(_camera);
@@ -50,7 +52,10 @@ namespace ZooWorld.UI
                 _countersDirty = false;
             }
 
-            _popups.Tick(Time.deltaTime);
+            // Advance only our tweens here, keeping popup motion in sync with world tracking.
+            float deltaTime = Time.deltaTime;
+            _counters.Tick(deltaTime);
+            _popups.Tick(deltaTime);
         }
 
         public void Dispose()
@@ -61,6 +66,9 @@ namespace ZooWorld.UI
             _disposed = true;
             _initialized = false;
             _feeding.AnimalEaten -= OnAnimalEaten;
+
+            if (_counters != null)
+                _counters.DisposeAnimations();
 
             if (_popups != null)
                 _popups.Clear();

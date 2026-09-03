@@ -101,7 +101,10 @@ namespace ZooWorld.UI
             for (int i = 0; i < _items.Length; i++)
             {
                 if (_items[i] != null)
+                {
+                    _items[i].DisposeAnimations();
                     Destroy(_items[i].gameObject);
+                }
             }
 
             _items = null;
