@@ -3,7 +3,9 @@
     "rootNamespace": "ZooWorld",
     "references": [
         "ZooWorld.Core",
-        "VContainer"
+        "VContainer",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
     ],
     "autoReferenced": true
 }
